@@ -5,6 +5,69 @@ All notable changes to the Claude Skills Library will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.5] - 2026-05-13 — vpe-advisor: throughput-first VP of Engineering
+
+### Added — C-Level Advisory
+
+- **vpe-advisor** skill (`./c-level-advisor/skills/vpe-advisor/`) — opinionated throughput-first VP of Engineering skill. Fifth decision-driven C-role skill in the founder-mode lineup (after GC, CDO, CAIO, CCO). Covers four specific decisions distinct from CTO:
+  1. **Are we delivering at the right throughput?** (DORA 4 metrics + bottleneck identification)
+  2. **How do we scale the eng hiring funnel?** (7-stage funnel + pipeline gap + weakest-stage fix)
+  3. **What's our eng team structure — when to add a tech-lead manager?** (squad/tribe + manager-trigger + span-of-control)
+  4. **What's our production discipline?** (on-call, deployment cadence, postmortem culture, SLO discipline — reference-only)
+- **Critical distinction enforced:** VPE is NOT a CTO skill. CTO owns *what to build* (architecture, scaling cliffs, build-vs-buy). VPE owns *how to ship it* (delivery operations, hiring execution, team structure, production discipline). At early stage these are often the same person; at scale they're distinct roles.
+- **3 stdlib Python tools with deterministic logic:**
+  - **`delivery_throughput_analyzer.py`** — Returns DORA 4 metrics (Deployment Frequency, Lead Time for Changes, MTTR, Change Failure Rate) with Elite/High/Medium/Low verdict per metric and overall. Cycle-time bottleneck identification (top wait stage as % of cycle) with typical fixes per bottleneck (review queue, CI flakiness, deploy gates, scheduled releases). Embedded sample (30-day Platform Squad, 28 deploys) → overall High; bottleneck = first_review_to_approval at 45.8% of cycle.
+  - **`eng_hiring_funnel_calculator.py`** — Stage-by-stage conversion rates for 7-stage funnel (Applied → Sourcer → Recruiter → Hiring Mgr → Tech → Onsite → Offer → Accept) with healthy/leaky verdict per stage. End-to-end conversion rate, required top-of-funnel volume for hiring target, weakest-stage identification with fixes (sourcing channel diversification, calibration, interview design, comp/close discipline). Embedded sample (Q2 2026, 4-engineer hiring target) → 0.62% end-to-end, gap of 160 candidates, weakest = offer_extended_to_offer_accepted at 60%.
+  - **`eng_team_structure_designer.py`** — Recommended structure (informal pods / formal squads / squads+tribes / multi-tribe) based on headcount. Squad sizing assessment (5-9 IC healthy range). Manager-trigger (first EM at 5-7 ICs; EM-overstretched > 10 ICs; EM-underutilized < 4 ICs). Director-trigger (3+ EMs reporting directly to VPE/CTO). Embedded sample (25-engineer team, 22 ICs / 3 EMs / 1 CTO) → 4-squad structure, no EM trigger (3 EMs for 22 ICs = healthy 7.3 per EM), director trigger FIRES (3 EMs report directly to CTO).
+- **4 in-depth references each citing 5+ authoritative sources:**
+  - `delivery_throughput.md` — Full DORA framework with thresholds + 4 common bottlenecks + what to fix first (lead time → failure rate → frequency → MTTR) + 4 anti-patterns. Cites Accelerate (Forsgren/Humble/Kim), Google State of DevOps annual report, The Phoenix Project, Reinertsen Flow, Newman Microservices, Humble Continuous Delivery, Atlassian/GitHub/GitLab benchmarks.
+  - `engineering_hiring_funnel.md` — 7-stage funnel + healthy conversion benchmarks + leakage diagnosis per stage + pipeline volume math + sourcing channel diversification + technical interview design + cost-per-hire. Cites LinkedIn Talent Insights, Atlassian Recruiting Ops, Levels.fyi + Pave, Lou Adler "Hire With Your Head", Adler/Bock "Work Rules!", CMU/Booth interview validity research, SHRM surveys.
+  - `eng_team_structure.md` — Conway's Law + headcount-to-structure map + span-of-control benchmarks + EM vs tech lead distinction + manager/director/VPE triggers + squad sizing + chapter discipline. Cites Kniberg "Scaling Agile @ Spotify", Kniberg 2020 retrospective, Will Larson "Elegant Puzzle", Camille Fournier "Manager's Path", Conway 1968, Schwartz "A Seat at the Table", Lencioni "Five Dysfunctions", Stripe/Shopify/GitHub/Netflix engineering blogs.
+  - `production_discipline.md` — On-call rotation design (≥ 6 people; burnout signals) + incident response (4-tier severity, IC role, blameless postmortems) + deployment cadence (continuous vs scheduled; progressive delivery) + SLO discipline integration + 5-level maturity model. Cites Google SRE (Beyer/Jones/Petoff/Murphy), SRE Workbook, John Allspaw postmortem writings, PagerDuty Incident Response docs, Charity Majors observability, Nora Jones chaos engineering, Mikey Dickerson reliability hierarchy.
+- **cs-vpe-advisor** agent (`./c-level-advisor/c-level-agents/agents/cs-vpe-advisor.md`) — throughput-first operator. Voice: "What's your cycle time, and where does the work spend most of its time waiting?" Trusts DORA metrics over vibe. Refuses to recommend hires without naming the throughput or quality bottleneck they unblock.
+- **`/cs:vpe-review`** slash command (`./c-level-advisor/c-level-agents/skills/vpe-review/SKILL.md`) — 6-question forcing interrogation: cycle time + waits, DORA verdict, hiring funnel leakage, team structure health, production discipline maturity, VPE-vs-CTO scope decision.
+- **cs-vpe-advisor voice spec** added to `persona-voices.md`.
+- **Dual-published from the start:** standalone plugin at `c-level-advisor/vpe-advisor/` with mirrored content (per #624 pattern). `sync_skill_bundles.py` keeps both copies aligned.
+
+### Why This Matters
+
+The single most-asked staffing question at Series B is: "Do we need a VPE separately from the CTO?" This skill makes the decision mechanical:
+
+- If CTO is spending > 50% on management vs strategy, VPE is needed
+- If CTO is a co-founder more comfortable with strategy than execution, VPE complements
+- At small scale (< 20 eng), one person can do both — but the operating decisions still need to be made
+
+Existing skills don't quite own these decisions: cs-cto-advisor is about architecture; cs-engineering-lead is day-to-day incident coordination; cs-chro-advisor owns hiring SYSTEMS company-wide but not eng-specific funnel execution. VPE fills the gap with deterministic frameworks for delivery operations.
+
+### Built with Karpathy-Coder Discipline (5th Consecutive PR)
+
+Maintained the discipline established in v2.5.2:
+
+- **Principle 1:** assumptions surfaced upfront, including the critical CTO-vs-VPE distinction. Locked direction before code.
+- **Principle 2:** rejected generic "engineering operations survey" framing. Each tool/reference covers ONE decision. No overlap with engineering tactical skills (`engineering/slo-architect/`, `engineering/feature-flags-architect/`, etc.).
+- **Principle 3:** touched only files in the locked plan. No "while I'm here" cleanup. No edits to other c-level skills.
+- **Principle 4:** all 3 Python tools smoke-tested with embedded samples before commit. Verifiable outputs (DORA overall High; hiring gap +160 candidates; 25-eng team → 4 squads, director trigger fired).
+
+### Changed
+
+- **Total skills:** 267 → 268 (+1 vpe-advisor)
+- **cs-* agents:** 32 → 33 (+1 cs-vpe-advisor in c-level-agents plugin)
+- **/cs:* slash commands:** 20 → 21 (+1 /cs:vpe-review)
+- **Python tools:** 370 → 373 (+3 in vpe-advisor/scripts/)
+- **References:** 502 → 506 (+4 in vpe-advisor/references/)
+- **Marketplace plugins:** 38 → 39 (+1 standalone vpe-advisor entry)
+- **c-level-skills** plugin: v2.5.4 → v2.5.5 (description expanded; 32 → 33 skills, 12 → 13 cs-* agents)
+- **c-level-agents** plugin: v1.4.0 → v1.5.0 (description expanded with VPE; new agent + command; +`vp-engineering`, `vpe`, `dora`, `delivery-throughput`, `engineering-hiring`, `eng-team-structure`, `production-discipline` keywords)
+
+### Known follow-ups (NOT in this PR per surgical scope)
+
+- `cs-general-counsel-advisor` voice spec still missing from `persona-voices.md` (carried from v2.5.1; multi-PR carry-over)
+- Phase 2 final remainder (1 role): CCO-comms (Chief Communications Officer) — naming conflict with CCO (Chief Customer Officer); needs disambiguation before adding
+
+### Disclaimer
+
+DORA benchmarks come from cross-industry research; specific thresholds shift with stage and complexity. Hiring funnel benchmarks vary by role level + geography. This skill provides operating-baseline guidance; pair with cs-cto-advisor (architecture), cs-chro-advisor (hiring systems), and engineering tactical skills for execution.
+
 ## [2.5.4] - 2026-05-13 — chief-customer-officer-advisor: retention-obsessed CCO
 
 ### Added — C-Level Advisory

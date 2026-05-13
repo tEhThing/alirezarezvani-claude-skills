@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **comprehensive skills library** for Claude AI and Claude Code - reusable, production-ready skill packages that bundle domain expertise, best practices, analysis tools, and strategic frameworks. The repository provides modular skills that teams can download and use directly in their workflows.
 
-**Current Scope:** 267 production-ready skills across 9 domains with 370 Python automation tools, 502 reference guides, 39 agents (32 `cs-*` + 7 personas), and 53 slash commands.
+**Current Scope:** 268 production-ready skills across 9 domains with 373 Python automation tools, 506 reference guides, 40 agents (33 `cs-*` + 7 personas), and 54 slash commands.
 
 **Key Distinction**: This is NOT a traditional application. It's a library of skill packages meant to be extracted and deployed by users into their own Claude workflows.
 
@@ -124,7 +124,16 @@ See [standards/git/git-workflow-standards.md](standards/git/git-workflow-standar
 
 ## Current Version
 
-**Version:** v2.5.4 (latest)
+**Version:** v2.5.5 (latest)
+
+**v2.5.5 Highlights — vpe-advisor: throughput-first VP of Engineering:**
+- **vpe-advisor** skill (new, `./c-level-advisor/skills/vpe-advisor/`) — opinionated throughput-first VPE skill covering 4 specific decisions distinct from CTO. 3 stdlib Python tools with deterministic logic: `delivery_throughput_analyzer.py` (DORA 4 metrics with Elite/High/Medium/Low verdict per metric + cycle-time bottleneck identification with typical fix per stage), `eng_hiring_funnel_calculator.py` (7-stage funnel conversion + healthy/leaky verdict per stage + end-to-end conversion + required top-of-funnel volume + weakest-stage fixes), `eng_team_structure_designer.py` (headcount-to-structure map + squad-size assessment + manager-trigger + director-trigger + span-of-control). 4 in-depth references each citing 5+ authoritative sources (DORA / Forsgren / Kim, Spotify squad model, Conway's Law, Will Larson, Camille Fournier, Google SRE Workbook).
+- **cs-vpe-advisor** agent (new) — throughput-first operator. Voice: "What's your cycle time, and where does the work spend most of its time waiting?" Distinguishes "what to build" (CTO) from "how to ship it" (VPE) with hard discipline.
+- **/cs:vpe-review** (new slash command) — 6-question forcing interrogation: cycle time + waits, DORA 4 metrics, hiring funnel leakage, team structure health, production discipline maturity, VPE-vs-CTO scope.
+- **Dual-published from the start:** standalone marketplace plugin AND bundled in c-level-skills.
+- **Karpathy-coder discipline maintained (5th consecutive PR):** assumptions surfaced upfront, verifiable success criteria, deterministic tool logic, no scope creep into engineering tactical skills.
+
+**Version:** v2.5.4
 
 **v2.5.4 Highlights — chief-customer-officer-advisor: retention-obsessed CCO:**
 - **chief-customer-officer-advisor** skill (new, `./c-level-advisor/skills/chief-customer-officer-advisor/`) — opinionated, retention-obsessed CCO skill covering 4 specific decisions. 3 stdlib Python tools with deterministic logic: `retention_decomposition_analyzer.py` (decomposes ARR retention into GRR / NRR / Logo by cohort, flags leaky-bucket pattern, categorizes churn into 7-category root-cause taxonomy with preventable %), `customer_segmentation_designer.py` (assigns 4-tier segment, scores ICP fit 0-10 across 7 weighted signals, surfaces kill list + upgrade candidates), `cs_coverage_calculator.py` (calculates CSM headcount per tier with ARR ratio + account count constraints, generates 12-month hiring plan with quarterly sequencing + manager-trigger thresholds). 4 in-depth references each citing 5+ authoritative sources (Mehta/Steinman/Murphy, BVP, TSIA, Skok, Tunguz).

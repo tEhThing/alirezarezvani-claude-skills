@@ -39,8 +39,8 @@
     {
       "name": "c-level-skills",
       "source": "./c-level-advisor",
-      "description": "32 C-level advisory skills + c-level-agents plugin layer: virtual board of directors (CEO, CTO, COO, CPO, CMO, CFO, CRO, CISO, CHRO) plus General Counsel, Chief Data Officer, Chief AI Officer, and Chief Customer Officer (retention decomposition analyzer, customer segmentation designer, CS coverage calculator with pooled/named CSM ratio math), executive mentor, founder coach, orchestration (Chief of Staff, board meetings, decision logger), strategic capabilities (board deck builder, scenario war room, competitive intel, M&A playbook), culture frameworks, and 12 cs-* persona agents + 20 /cs:* slash commands (founder-mode router, office-hours intake, multi-role boardroom, strategic sprint pipeline, cross-model consensus, cooldown freeze).",
-      "version": "2.5.4",
+      "description": "33 C-level advisory skills + c-level-agents plugin layer: virtual board of directors (CEO, CTO, COO, CPO, CMO, CFO, CRO, CISO, CHRO) plus General Counsel, CDO, CAIO, CCO, and VP of Engineering (DORA delivery throughput analyzer, engineering hiring funnel calculator with conversion + pipeline gap, eng team structure designer with squad/tribe + manager-trigger), executive mentor, founder coach, orchestration (Chief of Staff, board meetings, decision logger), strategic capabilities (board deck builder, scenario war room, competitive intel, M&A playbook), culture frameworks, and 13 cs-* persona agents + 21 /cs:* slash commands (founder-mode router, office-hours intake, multi-role boardroom, strategic sprint pipeline, cross-model consensus, cooldown freeze).",
+      "version": "2.5.5",
       "author": {
         "name": "Alireza Rezvani"
       },
@@ -61,8 +61,8 @@
     {
       "name": "c-level-agents",
       "source": "./c-level-advisor/c-level-agents",
-      "description": "Founder-mode executive team plugin: 12 cs-* C-suite agents (CFO, CMO, CRO, CPO, COO, CHRO, CISO, Chief of Staff, General Counsel, Chief Data Officer, Chief AI Officer, Chief Customer Officer) with distinct cognitive voices, plus 20 /cs:* slash commands — forcing-question office hours (CFO/CMO/CPO/CRO/CTO/CISO/GC/CDO/CAIO/CCO reviews), strategic sprint pipeline (brief → boardroom → decide → execute → post-mortem), and meta routing (/cs:founder-mode auto-router, /cs:onboard, /cs:cross-eval multi-model consensus, /cs:freeze cooldown lock). Wraps the 32 c-level skills with cognitive gearing, persona voice, and artifact-driven handoffs. The business-domain answer to YC Garry Tan's gstack.",
-      "version": "1.4.0",
+      "description": "Founder-mode executive team plugin: 13 cs-* C-suite agents (CFO, CMO, CRO, CPO, COO, CHRO, CISO, Chief of Staff, General Counsel, Chief Data Officer, Chief AI Officer, Chief Customer Officer, VP of Engineering) with distinct cognitive voices, plus 21 /cs:* slash commands — forcing-question office hours (CFO/CMO/CPO/CRO/CTO/CISO/GC/CDO/CAIO/CCO/VPE reviews), strategic sprint pipeline (brief → boardroom → decide → execute → post-mortem), and meta routing (/cs:founder-mode auto-router, /cs:onboard, /cs:cross-eval multi-model consensus, /cs:freeze cooldown lock). Wraps the 33 c-level skills with cognitive gearing, persona voice, and artifact-driven handoffs. The business-domain answer to YC Garry Tan's gstack.",
+      "version": "1.5.0",
       "author": {
         "name": "Alireza Rezvani"
       },
@@ -97,6 +97,12 @@
         "retention-decomposition",
         "customer-segmentation",
         "cs-coverage",
+        "vp-engineering",
+        "vpe",
+        "dora",
+        "delivery-throughput",
+        "engineering-hiring",
+        "eng-team-structure",
         "decision-logging",
         "cross-model"
       ],
@@ -143,6 +149,30 @@
         "lakehouse",
         "data-as-asset",
         "data-team-org"
+      ],
+      "category": "leadership"
+    },
+    {
+      "name": "vpe-advisor",
+      "source": "./c-level-advisor/vpe-advisor",
+      "description": "VP of Engineering advisory: delivery throughput analyzer (DORA 4 metrics + cycle-time bottleneck identification with typical fixes per stage), engineering hiring funnel calculator (7-stage conversion + pipeline gap + weakest-stage fixes from sourcing to offer-accept), engineering team structure designer (squad/tribe model + manager-trigger + director-trigger + span-of-control). 4 in-depth references citing DORA / Spotify / Conway / Google SRE / Larson / Fournier. Standalone-installable; also bundled in c-level-skills. NOT a CTO skill — VPE owns how the team ships; CTO owns what to build.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "vp-engineering",
+        "vpe",
+        "engineering-operations",
+        "dora",
+        "delivery-throughput",
+        "cycle-time",
+        "engineering-hiring",
+        "hiring-funnel",
+        "eng-team-structure",
+        "squad-tribe",
+        "manager-trigger",
+        "production-discipline"
       ],
       "category": "leadership"
     },
