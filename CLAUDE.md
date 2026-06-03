@@ -145,6 +145,26 @@ See [standards/git/git-workflow-standards.md](standards/git/git-workflow-standar
 
 ## Current Version
 
+**Version:** v2.10.2 (md-review — code-review converter for the markdown-html/ domain)
+
+**v2.10.2 highlights — md-review (code-review markdown → 2-col HTML):**
+
+Adds the fourth skill to `markdown-html/`. The Tier-2 use case from Shihipar's essay ("Code Review and PR Writeups"): a markdown PR writeup with ```diff blocks and `> [!BLOCKER]/[!MAJOR]/[!MINOR]/[!NIT]` severity callouts becomes a single-file 2-column HTML review with a top jump-nav, diff on the left, severity-tagged annotation cards on the right, and a mandatory named reviewer footer.
+
+- **`md-review` skill** — three stdlib tools pipeline together (diff_parser → annotation_extractor → review_html_renderer):
+  - **`diff_parser.py`** — scans markdown for ```diff fenced blocks, parses each as a unified diff (`--- a/file`, `+++ b/file`, `@@ -10,7 +10,8 @@`, ` ` / `+` / `-` body lines), assigns per-line numbers on both old (`lo`) and new (`ln`) sides, preserves the per-hunk @@ header context. Supports `--infer-diff` for unfenced/language-less blocks. Stdlib regex + state machine.
+  - **`annotation_extractor.py`** — extracts severity callouts (GFM `> [!BLOCKER]` style) and inline markers (`nit:`, `blocker:`, etc.). Default convention BLOCKER/MAJOR/MINOR/NIT per Google's *Code Review Developer Guide*; overridable via `--severity-convention "critical,important,suggestion,nit"`. Attaches each annotation to the nearest preceding diff block by source-line index; unanchored annotations go to a "general comments" section. Also captures `LGTM`/`👍`/`approved` markers separately as approvals.
+  - **`review_html_renderer.py`** — emits single-file 2-col HTML. Top jump-nav lists every annotation with severity badge + 80-char preview + jump link + counts in heading ("3 BLOCKER · 2 MAJOR · 1 NIT"). Each hunk-row is a CSS grid with diff on the left (per-line numbers, +/− marks, addition/deletion bg tints from `--md-success` / `--md-warn` via `color-mix`) and annotation cards on the right (severity badges that ship color + icon + aria-label + text per WCAG 1.4.1; BLOCKER danger color computed by hue-rotating the design-system accent 120° toward red). Approval bar surfaces when LGTM markers present and no findings. Collapses to stacked on viewports < 900px. Mandatory `--reviewer` (refuses with exit 3 otherwise — research-ops named-owner discipline). Refuses with exit 4 if no hunks present (wrong skill → route to md-document). No Prism CDN (diff coloring conflicts with syntax highlighting).
+- **3 reference docs** each citing 5-7 sources: `diff_rendering_canon.md` (POSIX diff + GitHub/GitLab + difftastic + *SWE at Google* ch. 9), `severity_coding.md` (WCAG 1.4.1 + Google review taxonomy + Don Norman *Design of Everyday Things* + NN/g color UX), `pr_annotation_ux.md` (convergent 2-col UX from GitHub/GitLab/Reviewable/CodeStream + *SWE at Google* + NN/g F-shape).
+- **1 template asset** documenting the canonical 2-col review HTML shape.
+- **`/cs:md-review` slash command** ships the 4 pre-flight gates (under-100-lines, no-onboarding, missing-reviewer, no-hunks) + pipeline + output digest.
+- **Empirical footprint**: 2-hunk sample review with 2 annotations → 11.3 KB single-file HTML.
+- **Plugin manifest:** `markdown-html-skills` plugin.json `skills` array now lists 4 paths. Marketplace counters updated: 64 plugins, 17 domains, **342 skills** (was 341 after v2.10.1).
+
+**Coming in v2.10.3:** `md-slides` — slide splitter + presenter-notes parser + arrow-key/space-bar nav + `@media print` for PDF export. Reuses `md-document`'s renderer scaffolding + `design-system/scripts/config_loader.py`.
+
+---
+
 **Version:** v2.10.1 (md-document — long-form converter for the markdown-html/ domain)
 
 **v2.10.1 highlights — md-document (long-form markdown → single-file HTML):**
