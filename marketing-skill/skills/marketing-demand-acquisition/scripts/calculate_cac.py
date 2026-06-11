@@ -73,6 +73,8 @@ def print_results(results: Dict):
             print()
 
 def main():
+    # TODO: accept channel data via --file <json> or stdin so the tool can be
+    # automated without hand-editing this list (known limitation).
     # Example data - replace with your actual numbers
     example_data = [
         {'channel': 'LinkedIn Ads', 'spend': 15000, 'customers': 10},
